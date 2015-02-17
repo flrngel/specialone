@@ -1,7 +1,7 @@
 {
   "name": "specialone",
   "version": "1.0.0",
-  "description": "zero downtime for docker containers",
+  "description": "zero-downtime with docker",
   "main": "index.js",
   "scripts": {
     "test": "npm test"
@@ -20,6 +20,9 @@
     "mocha": "^2.1.0"
   },
   "dependencies": {
-    "dockerode": "^2.0.7"
+    "async": "^0.9.0",
+    "dockerode": "^2.0.7",
+    "underscore": "^1.7.0",
+    "waitjs": "^0.2.0"
   }
 }
