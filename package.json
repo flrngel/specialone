@@ -18,5 +18,8 @@
   "homepage": "https://github.com/flrngel/specialone",
   "devDependencies": {
     "mocha": "^2.1.0"
+  },
+  "dependencies": {
+    "dockerode": "^2.0.7"
   }
 }
