@@ -1,0 +1,22 @@
+{
+  "name": "specialone",
+  "version": "1.0.0",
+  "description": "zero downtime for docker containers",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flrngel/specialone"
+  },
+  "author": "flrngel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flrngel/specialone/issues"
+  },
+  "homepage": "https://github.com/flrngel/specialone",
+  "devDependencies": {
+    "mocha": "^2.1.0"
+  }
+}
