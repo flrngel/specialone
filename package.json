@@ -4,7 +4,8 @@
   "description": "zero-downtime with docker",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
