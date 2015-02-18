@@ -48,3 +48,8 @@ CONTAINER ID        IMAGE                       COMMAND                CREATED  
 bf54222669f9        redis:2.8.12                "/entrypoint.sh redi   2 seconds ago        Up 1 seconds        6379/tcp            new                 
 c9c334b73d20        flrngel/specialone:latest   "npm start"            About a minute ago   Up About a minute                       pensive_lalande     
 ```
+
+## TODO
+
+- etcd for service discovery
+- haproxy for port-exposed containers
