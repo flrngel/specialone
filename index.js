@@ -7,9 +7,8 @@ var Docker = require("dockerode");
 
 var docker_socket = process.env.DOCKER_SOCKET || "/var/run/docker.sock";
 
-var interval = process.env.SP_INTERVAL || 4000;
+var interval = process.env.SP_INTERVAL || 1000;
 var kill_timeout = process.env.SP_KILL_TIMEOUT || 10;
-var kill_wait = process.env.SP_KILL_WAIT || 3000;
 
 var stats = fs.statSync(docker_socket);
 
@@ -24,6 +23,17 @@ var docker = new Docker({
 var inspectContainer = function(containerInfo, callback){
   var container = docker.getContainer(containerInfo.Id);
   container.inspect(function(err, data){
+    // Unserialize Env
+    var hsh = {};
+    for(var i in data.Config.Env){
+      var index = data.Config.Env[i].indexOf("=");
+      var key = data.Config.Env[i].substr(0, index);
+      var val = data.Config.Env[i].substr(index + 1);
+
+      hsh[key] = val;
+    }
+    data.Config.Env = hsh;
+
     callback(null, data);
   });
 };
@@ -35,25 +45,25 @@ var run = function(){
     // get all runnning containers
     async.map(containers, inspectContainer, function(err, results){
       // reject all non-special containers
-      results = _.reject(results, function(result){
-        return result.Config.Env.SP_GROUP === null;
+      var rejected_results = _.reject(results, function(result){
+        return result.Config.Env.SP_GROUP == null;
       });
 
       // group by SP_GROUP
-      groups = _.groupBy(results, function(result){
+      var groups = _.groupBy(rejected_results, function(result){
         return result.Config.Env.SP_GROUP;
       });
 
       for(var key in groups ){
         var group = groups[key];
-        
+
         // sort by created
-        sorted_group = _.sortBy(group, function(container){
+        var sorted_group = _.sortBy(group, function(container){
           return container.Created;
         });
 
         // get container ids
-        container_ids = _.map(sorted_group, function(obj){
+        var container_ids = _.map(sorted_group, function(obj){
           return obj.Id;
         });
 
