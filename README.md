@@ -19,12 +19,14 @@ running daemon
 environments
 
 - `SP_INTERVAL` - miliseconds interval to check containers
-
+- `SP_KILL_WAIT` - waiting seconds to kill before on `docker stop`
 - `SP_KILL_TIMEOUT` - seconds to kill after timeout on `docker stop`
 
 to group container, give docker environment as
 
 - `SP_GROUP` - specialone will kill old containers with same group name
+- `SP_KILL_WAIT` - overwrite waiting seconds to kill before on `docker stop`
+- `SP_KILL_TIMEOUT` - overwrite seconds to kill after timeout on `docker stop`
 
 ## Example
 
@@ -52,4 +54,5 @@ c9c334b73d20        flrngel/specialone:latest   "npm start"            About a m
 ## TODO
 
 - etcd for service discovery
+- logging
 - haproxy for port-exposed containers

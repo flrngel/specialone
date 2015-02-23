@@ -8,7 +8,8 @@ var Docker = require("dockerode");
 var docker_socket = process.env.DOCKER_SOCKET || "/var/run/docker.sock";
 
 var interval = process.env.SP_INTERVAL || 1000;
-var kill_timeout = process.env.SP_KILL_TIMEOUT || 10;
+var kill_timeout = process.env.SP_KILL_TIMEOUT || 1000;
+var kill_wait = process.env.SP_KILL_WAIT || 1000;
 
 var stats = fs.statSync(docker_socket);
 
@@ -37,6 +38,8 @@ var inspectContainer = function(containerInfo, callback){
     callback(null, data);
   });
 };
+
+var swap_ids = {};
 
 var run = function(){
   docker.listContainers({
@@ -69,8 +72,24 @@ var run = function(){
 
         // stop containers before the last one
         for(var i=0;i<container_ids.length-1;i++){
+          // skip if it is already registered
+          if( swap_ids[container_ids[i]] == true ) continue;
+
           var container = docker.getContainer(container_ids[i]);
-          container.stop({t: kill_timeout}, function(error,data){})
+
+          // override kill environments from container
+          var container_kill_timeout = sorted_group[i].Config.Env.SP_KILL_TIMEOUT || kill_timeout;
+          var container_kill_wait = sorted_group[i].Config.Env.SP_KILL_WAIT || kill_wait;
+
+          // wait until container_kill_wait 
+          (function(container, container_kill_wait, container_kill_timeout){
+            wait(container_kill_wait, function(){
+              container.stop({t: kill_timeout}, function(error,data){})
+            });
+          })(container, container_kill_wait, container_kill_timeout);
+
+          // register
+          swap_ids[container_ids[i]] = true;
         }
       }
     });
