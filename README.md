@@ -10,7 +10,7 @@ kills old container with same `SP_GROUP` environment
 
 npm intall
 
-`npm install -g specialone`
+`sudo npm install -g specialone`
 
 on Docker host
 
