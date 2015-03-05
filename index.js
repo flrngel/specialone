@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 require("waitjs")
 
 var _ = require("underscore");
