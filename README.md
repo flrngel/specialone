@@ -55,7 +55,7 @@ c9c334b73d20        flrngel/specialone:latest   "npm start"            About a m
 
 ## ETCD
 
-- groups i
+- groups are in `sp/` as `sp/<SP_GROUP>`
 - ip is in `sp/<SP_GROUP>/<CONTAINER_ID>/ip`
 - port keys are in `sp/<SP_GROUP>/<CONTAINER_ID>/ports/`
 
