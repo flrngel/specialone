@@ -53,6 +53,10 @@ var run = function(){
   docker.listContainers({
     all: false 
   }, function(err, containers){
+    if(containers === null){
+      return;
+    }
+
     // get all runnning containers
     async.map(containers, inspectContainer, function(err, results){
       // reject all non-special containers
