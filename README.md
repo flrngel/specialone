@@ -8,9 +8,13 @@ kills old container with same `SP_GROUP` environment
 
 ## Usage
 
+npm intall
+
+`npm install -g specialone`
+
 on Docker host
 
-`sudo node index.js`
+`sudo specialone`
 
 ## Usage with Docker
 
