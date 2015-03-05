@@ -8,6 +8,12 @@ kills old container with same `SP_GROUP` environment
 
 ## Usage
 
+on Docker host
+
+`sudo node index.js`
+
+## Usage with Docker
+
 on build
 
 `sudo docker build -t flrngel/specialone .`
