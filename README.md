@@ -1,6 +1,6 @@
 # Specialone
 
-Zero-downtime for docker containers.
+unique docker container with etcd service discovery.
 
 ## Concept
 
@@ -21,6 +21,8 @@ environments
 - `SP_INTERVAL` - miliseconds interval to check containers
 - `SP_KILL_WAIT` - waiting seconds to kill before on `docker stop`
 - `SP_KILL_TIMEOUT` - seconds to kill after timeout on `docker stop`
+- `SP_ETCD_HOST` - etcd host `ex) 127.0.0.1:4001`
+- `SP_ETCD_TTL` - TTL for etcd keys
 
 to group container, give docker environment as
 
@@ -51,8 +53,13 @@ bf54222669f9        redis:2.8.12                "/entrypoint.sh redi   2 seconds
 c9c334b73d20        flrngel/specialone:latest   "npm start"            About a minute ago   Up About a minute                       pensive_lalande     
 ```
 
+## ETCD
+
+- groups i
+- ip is in `sp/<SP_GROUP>/<CONTAINER_ID>/ip`
+- port keys are in `sp/<SP_GROUP>/<CONTAINER_ID>/ports/`
+
 ## TODO
 
-- etcd for service discovery
 - logging
 - haproxy for port-exposed containers
