@@ -13,6 +13,9 @@
   },
   "author": "flrngel",
   "license": "MIT",
+  "bin": {
+    "specialone": "index.js"
+  },
   "bugs": {
     "url": "https://github.com/flrngel/specialone/issues"
   },
