@@ -116,6 +116,7 @@ var run = function(){
           if( swap_ids[container_ids[i]] == true ) continue;
 
           var container = docker.getContainer(container_ids[i]);
+          if( sorted_group[i].Config.Env.SP_NO_KILL == "true" ) continue;
 
           // override kill environments from container
           var container_kill_timeout = sorted_group[i].Config.Env.SP_KILL_TIMEOUT || kill_timeout;

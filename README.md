@@ -29,6 +29,7 @@ running daemon
 environments
 
 - `SP_INTERVAL` - miliseconds interval to check containers
+- `SP_NO_KILL` - flag having `true` or `false` value to kill container
 - `SP_KILL_WAIT` - waiting seconds to kill before on `docker stop`
 - `SP_KILL_TIMEOUT` - seconds to kill after timeout on `docker stop`
 - `SP_ETCD_HOST` - etcd host `ex) 127.0.0.1:4001`
