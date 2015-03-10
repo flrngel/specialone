@@ -1,6 +1,6 @@
 {
   "name": "specialone",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "zero-downtime with docker",
   "main": "index.js",
   "scripts": {
