@@ -24,7 +24,7 @@ on build
 
 running daemon
 
-`sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock flrngel/specialone`
+`sudo docker run --net=host -d -v /var/run/docker.sock:/var/run/docker.sock flrngel/specialone`
 
 environments
 
@@ -67,8 +67,7 @@ c9c334b73d20        flrngel/specialone:latest   "npm start"            About a m
 ## ETCD
 
 - groups are in `sp/` as `sp/<SP_GROUP>`
-- ip is in `sp/<SP_GROUP>/<CONTAINER_ID>/ip`
-- port keys are in `sp/<SP_GROUP>/<CONTAINER_ID>/ports/`
+- discovery container as `sp/<SP_GROUP>/<HOST_IP>:<CONTAINER_PORT>`
 
 ## TODO
 

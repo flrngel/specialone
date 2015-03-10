@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-require("waitjs")
+require("waitjs");
 
 var _ = require("underscore");
 var async = require("async");
@@ -18,6 +18,22 @@ var kill_wait = process.env.SP_KILL_WAIT || 1000;
 // ETCD configuration
 var etcd_host = process.env.SP_ETCD_HOST ? process.env.SP_ETCD_HOST.toString().split(',') : false;
 var etcd_ttl = process.env.SP_ETCD_TTL || interval * 30;
+
+// Get local ip
+var os = require('os');
+
+var interfaces = os.networkInterfaces();
+var addresses = [];
+for (var k in interfaces) {
+  for (var k2 in interfaces[k]) {
+    var address = interfaces[k][k2];
+    if (address.family === 'IPv4' && !address.internal) {
+      addresses.push(address.address);
+    }
+  }
+}
+
+var this_ip = addresses[0];
 
 var stats = fs.statSync(docker_socket);
 
@@ -61,7 +77,7 @@ var run = function(){
     async.map(containers, inspectContainer, function(err, results){
       // reject all non-special containers
       var rejected_results = _.reject(results, function(element){
-        return element.Config.Env.SP_GROUP == null;
+        return element.Config.Env.SP_GROUP === null;
       });
 
       // group by SP_GROUP
@@ -81,13 +97,14 @@ var run = function(){
           // register on ETCD
           for(var i=0;i<sorted_group.length;i++){
             // list NetworkSetting
-            exposed_info = _.map(sorted_group[i].NetworkSettings.Ports, function(num, key){
-              return key;
+            exposed_info = _.map(sorted_group[i].NetworkSettings.Ports, function(val, key){
+              if( key.indexOf("/tcp") == -1 ) return -1;
+              return val[0].HostPort;
             });
 
             // reject non-TCP
             exposed_info = _.reject(exposed_info, function(element){
-              return element.indexOf("/tcp") == -1;
+              return element == -1;
             });
 
             // parseInt
@@ -99,9 +116,8 @@ var run = function(){
             var etcd = new Etcd(etcd_host);
             for(var j=0;j<exposed_tcp_ports.length;j++){
               // ports exposed
-              etcd.set("sp/" + key + "/" + sorted_group[i].Id + "/ports/" + exposed_tcp_ports[j], { ttl: etcd_ttl })
+              etcd.set("sp/" + key + "/" + this_ip + ":" + exposed_tcp_ports[j], sorted_group[i].Id, { ttl: etcd_ttl });
             }
-            etcd.set("sp/" + key + "/" + sorted_group[i].Id + "/ip",  sorted_group[i].NetworkSettings.IP, { ttl: etcd_ttl }, console.log)
           }
         }
 
@@ -113,7 +129,7 @@ var run = function(){
         // stop containers before the last one
         for(var i=0;i<container_ids.length-1;i++){
           // skip if it is already registered
-          if( swap_ids[container_ids[i]] == true ) continue;
+          if( swap_ids[container_ids[i]] === true ) continue;
 
           var container = docker.getContainer(container_ids[i]);
           if( sorted_group[i].Config.Env.SP_NO_KILL == "true" ) continue;
@@ -125,7 +141,7 @@ var run = function(){
           // wait until container_kill_wait 
           (function(container, container_kill_wait, container_kill_timeout){
             wait(container_kill_wait, function(){
-              container.stop({t: kill_timeout}, function(error,data){})
+              container.stop({t: kill_timeout}, function(error,data){});
             });
           })(container, container_kill_wait, container_kill_timeout);
 
