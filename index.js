@@ -17,7 +17,7 @@ var kill_wait = process.env.SP_KILL_WAIT || 1000;
 
 // ETCD configuration
 var etcd_host = process.env.SP_ETCD_HOST ? process.env.SP_ETCD_HOST.toString().split(',') : false;
-var etcd_ttl = process.env.SP_ETCD_TTL || interval * 30;
+var etcd_ttl = process.env.SP_ETCD_TTL || interval / 1000 * 30;
 
 // Get local ip
 var os = require('os');
