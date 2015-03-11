@@ -77,7 +77,7 @@ var run = function(){
     async.map(containers, inspectContainer, function(err, results){
       // reject all non-special containers
       var rejected_results = _.reject(results, function(element){
-        return element.Config.Env.SP_GROUP === null;
+        return element.Config.Env.SP_GROUP == null;
       });
 
       // group by SP_GROUP
@@ -129,7 +129,7 @@ var run = function(){
         // stop containers before the last one
         for(var i=0;i<container_ids.length-1;i++){
           // skip if it is already registered
-          if( swap_ids[container_ids[i]] === true ) continue;
+          if( swap_ids[container_ids[i]] == true ) continue;
 
           var container = docker.getContainer(container_ids[i]);
           if( sorted_group[i].Config.Env.SP_NO_KILL == "true" ) continue;
