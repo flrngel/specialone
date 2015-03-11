@@ -99,6 +99,7 @@ var run = function(){
             // list NetworkSetting
             exposed_info = _.map(sorted_group[i].NetworkSettings.Ports, function(val, key){
               if( key.indexOf("/tcp") == -1 ) return -1;
+              if( val == null ) return -1;
               return val[0].HostPort;
             });
 
