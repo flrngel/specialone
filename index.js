@@ -141,13 +141,14 @@ var run = function(){
 
           // wait until container_kill_wait 
           (function(container, container_kill_wait, container_kill_timeout){
-            wait(container_kill_wait, function(){
-              container.stop({t: kill_timeout}, function(error,data){});
-            });
+            setTimeout(function(){
+              if( swap_ids[container["id"]] == true ) return;
+              container.stop({t: kill_timeout}, function(error,data){
+              // register
+                swap_ids[container["id"]] = true;
+              });
+            }, container_kill_wait);
           })(container, container_kill_wait, container_kill_timeout);
-
-          // register
-          swap_ids[container_ids[i]] = true;
         }
       }
     });
