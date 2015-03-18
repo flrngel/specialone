@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-require("waitjs");
-
 var _ = require("underscore");
 var async = require("async");
 var fs = require("fs");
@@ -159,4 +157,4 @@ var run = function(){
   });
 };
 
-repeat(interval, run);
+setInterval(run, interval);

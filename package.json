@@ -27,7 +27,6 @@
     "async": "^0.9.0",
     "dockerode": "^2.0.7",
     "node-etcd": "^4.0.0",
-    "underscore": "^1.7.0",
-    "waitjs": "^0.2.0"
+    "underscore": "^1.7.0"
   }
 }
