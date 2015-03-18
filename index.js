@@ -13,11 +13,11 @@ var docker_socket = process.env.DOCKER_SOCKET || "/var/run/docker.sock";
 // Basic configuration
 var interval = process.env.SP_INTERVAL || 1000;
 var kill_timeout = process.env.SP_KILL_TIMEOUT || 1000;
-var kill_wait = process.env.SP_KILL_WAIT || 1000;
+var kill_wait = process.env.SP_KILL_WAIT || interval * 10;
 
 // ETCD configuration
 var etcd_host = process.env.SP_ETCD_HOST ? process.env.SP_ETCD_HOST.toString().split(',') : false;
-var etcd_ttl = process.env.SP_ETCD_TTL || interval / 1000 * 30;
+var etcd_ttl = process.env.SP_ETCD_TTL || interval / 1000 * 5;
 
 // Get local ip
 var os = require('os');
@@ -64,6 +64,7 @@ var inspectContainer = function(containerInfo, callback){
 };
 
 var swap_ids = {};
+var stale_ids = {};
 
 var run = function(){
   docker.listContainers({
@@ -117,6 +118,7 @@ var run = function(){
             var etcd = new Etcd(etcd_host);
             for(var j=0;j<exposed_tcp_ports.length;j++){
               // ports exposed
+              if( stale_ids[sorted_group[i].Id] == true ) continue;
               etcd.set("sp/" + key + "/" + this_ip + ":" + exposed_tcp_ports[j], sorted_group[i].Id, { ttl: etcd_ttl });
             }
           }
@@ -146,9 +148,11 @@ var run = function(){
               container.stop({t: kill_timeout}, function(error,data){
               // register
                 swap_ids[container["id"]] = true;
+                delete stale_ids[container["id"]];
               });
             }, container_kill_wait);
           })(container, container_kill_wait, container_kill_timeout);
+          stale_ids[container_ids[i]] = true;
         }
       }
     });
